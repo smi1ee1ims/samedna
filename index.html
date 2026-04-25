@@ -4,32 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMDNA</title>
-    <link rel="stylesheet" href="css/style.css">
+    <script>const CACHE_VERSION = 28;</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=46">
 </head>
 <body>
+    <!-- 动态几何背景 -->
+    <div class="bg-canvas">
+        <!-- 左上偏下 -->
+        <svg class="bg-ring-sector arc4" style="top:60px;left:160px" width="200" height="200" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="75" fill="none" stroke="rgba(0,49,83,0.3)" stroke-width="24" stroke-dasharray="314 471" transform="rotate(-90 100 100)"/>
+        </svg>
+        <!-- 左下 -->
+        <svg class="bg-ring-sector arc2" style="bottom:25%;left:170px" width="180" height="180" viewBox="0 0 180 180">
+            <circle cx="90" cy="90" r="65" fill="none" stroke="rgba(155,27,48,0.26)" stroke-width="20" stroke-dasharray="272 408" transform="rotate(-90 90 90)"/>
+        </svg>
+        <!-- 右下角 -->
+        <svg class="bg-ring-sector arc1" style="bottom:-90px;right:-90px" width="300" height="300" viewBox="0 0 300 300">
+            <circle cx="150" cy="150" r="115" fill="none" stroke="rgba(0,49,83,0.26)" stroke-width="34" stroke-dasharray="503 723" transform="rotate(-90 150 150)"/>
+        </svg>
+        <!-- 右侧中部 -->
+        <svg class="bg-ring-sector arc3" style="top:32%;right:-45px" width="205" height="205" viewBox="0 0 205 205">
+            <circle cx="102" cy="102" r="77" fill="none" stroke="rgba(155,27,48,0.25)" stroke-width="23" stroke-dasharray="322 484" transform="rotate(-90 102 102)"/>
+        </svg>
+        <!-- 顶部居中 -->
+        <svg class="bg-ring-sector arc7" style="top:-30px;left:45%" width="170" height="170" viewBox="0 0 170 170">
+            <circle cx="85" cy="85" r="62" fill="none" stroke="rgba(0,49,83,0.24)" stroke-width="18" stroke-dasharray="210 390" transform="rotate(-90 85 85)"/>
+        </svg>
+        <!-- 底部居中 -->
+        <svg class="bg-ring-sector arc5" style="bottom:-40px;left:48%" width="190" height="190" viewBox="0 0 190 190">
+            <circle cx="95" cy="95" r="68" fill="none" stroke="rgba(155,27,48,0.22)" stroke-width="21" stroke-dasharray="228 428" transform="rotate(-90 95 95)"/>
+        </svg>
+        <!-- 中央区域 -->
+        <svg class="bg-ring-sector arc6" style="top:52%;left:52%;transform:translate(-52%,-52%)" width="280" height="280" viewBox="0 0 280 280">
+            <circle cx="140" cy="140" r="100" fill="none" stroke="rgba(0,49,83,0.18)" stroke-width="26" stroke-dasharray="380 628" transform="rotate(-90 140 140)"/>
+        </svg>
+    </div>
+
     <aside class="sidebar">
         <div class="logo">SMDNA</div>
         <nav class="nav">
-            <a href="#" class="nav-item active">Spotify大盘</a>
+            <a href="#" class="nav-item active" data-page="charts">Spotify大盘</a>
         </nav>
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-item nav-item-small" id="changelogBtn">
+                更新日志
+                <span class="version-badge">v1.2.1</span></a>
+        </div>
     </aside>
 
-    <main class="content">
-        <h1>Spotify Global 大盘查询</h1>
-        <p class="subtitle">输入日期，查询该日 Spotify Global Top 200 播放量总和</p>
+    <main class="content" id="mainContent">
+        <div id="chartsPage">
+            <h1>Spotify Global 大盘查询</h1>
+            <!-- <p class="subtitle">输入日期，查询该日 Spotify Global Top 200 播放量总和</p> -->
+            
+            <div class="cards-row">
+                <div class="left-cards">
+                    <div class="result">
+                        <div class="card-header">
+                            <span class="card-title">每日大盘</span>
+                            <input type="date" id="dateInput">
+                        </div>
+                        <div class="result-value" id="resultValue">--</div>
+                    </div>
 
-        <div class="query-box">
-            <input type="date" id="dateInput" value="2024-01-01">
-            <button id="queryBtn">查询</button>
+                    <div class="compare-box">
+                        <div class="card-header">
+                            <span class="card-title">大盘对比</span>
+                        </div>
+                        <div class="compare-vertical">
+                            <div class="compare-line">
+                                <input type="date" id="compareDate1">
+                                <div class="compare-value" id="compareValue1">--</div>
+                            </div>
+                            <div class="compare-arrow">
+                                <div id="compareRatio">--</div>
+                            </div>
+                            <div class="compare-line">
+                                <input type="date" id="compareDate2">
+                                <div class="compare-value" id="compareValue2">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-section">
+                    <div class="card-header">
+                        <span class="card-title">走势</span>
+                        <div class="chart-range">
+                            <input type="date" id="startDate">
+                            <span>至</span>
+                            <input type="date" id="endDate">
+                            <button id="chartBtn">刷新</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="chart"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div id="result" class="result hidden">
-            <div class="result-label">大盘数值</div>
-            <div class="result-value" id="resultValue">--</div>
-            <div class="result-date" id="resultDate"></div>
+        <div id="changelogPage" class="hidden">
+            <h1>更新日志</h1>
+            <div class="changelog-content">
+                <div id="changelogList"></div>
+            </div>
         </div>
     </main>
 
-    <script src="js/app.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <script src="js/app.js?v=29"></script>
 </body>
 </html>
